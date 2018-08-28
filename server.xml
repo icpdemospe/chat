@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><server>
+    <featureManager>
+        <feature>jsp-2.3</feature>
+        <feature>mdb-3.2</feature>
+        <feature>cdi-1.2</feature>
+        <feature>jsonp-1.0</feature>
+        <feature>websocket-1.1</feature>
+        <feature>jdbc-4.1</feature>
+        <feature>wasJmsServer-1.0</feature>
+        <feature>javaMail-1.5</feature>
+        <feature>wasJmsClient-2.0</feature>
+    </featureManager>
+    <httpEndpoint host="*" httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"/>
+    <authData id="MedRecGlobalDataSourceXA_medrec" password="???" user="medrec"/>
+    <jdbcDriver id="MedRecGlobalDataSourceXA" javax.sql.DataSource="org.apache.derby.jdbc.ClientXADataSource">
+        <library>
+            <!-- <file name="${DERBY_JDBC_DRIVER_PATH}/derbyclient.jar"/> -->
+            <file name="/config/lib/derbyclient.jar"/>
+        </library>
+    </jdbcDriver>
+    <dataSource containerAuthDataRef="MedRecGlobalDataSourceXA_medrec" id="MedRecGlobalDataSourceXA" jdbcDriverRef="MedRecGlobalDataSourceXA" jndiName="jdbc/MedRecGlobalDataSourceXA"/>
+    <jmsConnectionFactory id="MedRecConnectionFactory" jndiName="com.oracle.medrec.jms.connectionFactory">
+        <properties.wasJms/>
+    </jmsConnectionFactory>
+    <messagingEngine>
+        <queue id="PatientNotificationQueue"/>
+    </messagingEngine>
+    <jmsQueue id="PatientNotificationQueue" jndiName="com.oracle.medrec.jms.PatientNotificationQueue">
+        <properties.wasJms queueName="PatientNotificationQueue"/>
+    </jmsQueue>
+    <jmsActivationSpec id="PatientNotificationQueueSpec">
+        <properties.wasJms destinationRef="PatientNotificationQueue" destinationType="javax.jms.Queue"/>
+    </jmsActivationSpec>
+    <mailSession description="" from="unknown" jndiName="mail/MedRecMailSession" mailSessionID="mail/MedRecMailSession">
+        <property/>
+    </mailSession>
+    <variable name="DERBY_JDBC_DRIVER_PATH" value=""/>
+</server>
